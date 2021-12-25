@@ -7,15 +7,16 @@ wxIMPLEMENT_APP(myapp);
 bool myapp:: OnInit(){
  wxBitmap bitmap;
 
- if (bitmap.LoadFile("presplash.png", wxBITMAP_TYPE_PNG))
-{
+ if (bitmap.LoadFile("./media/ums_icon.png", wxBITMAP_TYPE_PNG)){
     wxSplashScreen* splash = new wxSplashScreen(bitmap,
         wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-        6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+        3000, NULL, -1, wxDefaultPosition, wxDefaultSize,
         wxBORDER_SIMPLE|wxSTAY_ON_TOP);
+
 }
-wxYield();
- optionFrame* options = new optionFrame("");
+ wxYield();
+ sleep(2);
+ optionFrame* options = new optionFrame("UMS");
  
  options->Show(true);
  SetTopWindow(options); 
