@@ -23,6 +23,8 @@ optionFrame::optionFrame(const wxString& title)
   SetSizerAndFit(button_sizer);
 
   Centre();
+// set icon in the taskbar
 
+  SetIcon(wxIcon("./media/ums1.png"));
 }
 
