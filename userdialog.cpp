@@ -1,7 +1,12 @@
+#include <wx/image.h>
 #include "userdialog.h"
+
 
 userDialog::userDialog(const wxString& Title)
            : wxDialog(nullptr, -1, Title, wxDefaultPosition, wxSize(850, 850)){
+ 
+ wxImage::AddHandler( new wxPNGHandler);
+ wxImage::AddHandler(new wxJPEGHandler);
 
  wxPanel* panel = new wxPanel(this, -1);
  wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
@@ -9,19 +14,22 @@ userDialog::userDialog(const wxString& Title)
 
  wxStaticBox* name = new wxStaticBox(panel, -1, wxT("Full Name"), wxPoint(15,5), wxSize(250,100));
 
- wxStaticBox* image = new wxStaticBox(panel, -1, wxT("Image"), wxPoint(280, 5), wxSize(210,200));
- wxTextCtrl* name_text = new wxTextCtrl(panel, -1, wxEmptyString,  wxPoint(20,20), wxSize(200, 80));
+ wxStaticBox* image = new wxStaticBox(panel, -1, wxT("Image"), wxPoint(280, 5), wxSize(200,200));
+ wxButton* add_img = new wxButton(panel, 1, wxT("Select"), wxPoint(340, 80), wxSize(70,30)); 
+ 
+
+ wxTextCtrl* name_text = new wxTextCtrl(panel, -1, wxEmptyString,  wxPoint(20,20), wxSize(230, 80));
 
  wxStaticBox* email = new wxStaticBox(panel,-1,wxT("Email"),wxPoint(15, 105), wxSize(250,100));
- wxTextCtrl* email_text = new wxTextCtrl(panel, -1, wxEmptyString,  wxPoint(20,120), wxSize(200, 80));
+ wxTextCtrl* email_text = new wxTextCtrl(panel, -1, wxEmptyString,  wxPoint(20,120), wxSize(230, 80));
 
 
  wxStaticBox* address = new wxStaticBox(panel,-1,wxT("Address"),wxPoint(15, 205),wxSize(250,100));
- wxTextCtrl* address_text = new wxTextCtrl(panel, -1, wxEmptyString,  wxPoint(20,220), wxSize(200, 80));
+ wxTextCtrl* address_text = new wxTextCtrl(panel, -1, wxEmptyString,  wxPoint(20,220), wxSize(230, 80));
 
  wxStaticBox* phone = new wxStaticBox(panel, -1 , wxT("Phone"), wxPoint(280, 205 ), wxSize(250,100));
 
- wxTextCtrl* phone_text = new wxTextCtrl(panel, -1, wxEmptyString, wxPoint(290, 220), wxSize(200,80)); 
+ wxTextCtrl* phone_text = new wxTextCtrl(panel, -1, wxEmptyString, wxPoint(290, 220), wxSize(230,80)); 
 
  wxStaticBox* gender = new wxStaticBox(panel, -1, wxT("Gender"), wxPoint(15, 305), wxSize(250,100));
   
@@ -34,21 +42,49 @@ userDialog::userDialog(const wxString& Title)
 
 
 
-wxButton* addButton = new wxButton(this, -1, wxT("Add"), wxDefaultPosition, wxSize(70, 30));
+ wxButton* addButton = new wxButton(this, 2, wxT("Add"), wxDefaultPosition, wxSize(70, 30));
 
-wxButton* cancelButton = new wxButton (this, -1, wxT("Cancel"), wxDefaultPosition, wxSize(70, 30));
+ wxButton* cancelButton = new wxButton (this, 3, wxT("Cancel"), wxDefaultPosition, wxSize(70, 30));
 
-hbox->Add(addButton, 1);
-hbox->Add(cancelButton, 1, wxLeft, 5);
+ hbox->Add(addButton, 1);
+ hbox->Add(cancelButton, 1, wxLeft, 5);
 
-vbox->Add(panel, 1);
-vbox->Add(hbox, 0 , wxALIGN_CENTER | wxTOP | wxBOTTOM , 10); 
+ vbox->Add(panel, 1);
+ vbox->Add(hbox, 0 , wxALIGN_CENTER | wxTOP | wxBOTTOM , 10); 
 
-SetSizer(vbox);
+ SetSizer(vbox);
 
-Centre();
-ShowModal();
+ Centre();
+ ShowModal();
+ 
+ Destroy();
 
-Destroy();
+}
 
+wxBEGIN_EVENT_TABLE(userDialog, wxDialog)
+   EVT_BUTTON(1, userDialog::onSelectImage)
+   EVT_BUTTON(2, userDialog::onAddUser)
+   EVT_BUTTON(3, userDialog::onCancel)
+ wxEND_EVENT_TABLE()
+
+
+void userDialog::onCancel(wxCommandEvent& event){
+  wxMessageDialog* dialog = new wxMessageDialog(this, wxT("No user will be added"), wxT("Question"), wxOK | wxCANCEL);
+
+ dialog->ShowModal();
+ Close(true); 
+}
+
+void userDialog::onAddUser(wxCommandEvent& event){
+ wxMessageDialog* dialog = new wxMessageDialog(this, wxT("A new user will be added"), wxT("Question"), wxOK | wxCANCEL);
+ dialog->ShowModal();
+  
+}
+
+void userDialog::onSelectImage(wxCommandEvent& event){
+ //to do: open a file select dialog menu
+ 
+ wxFileDialog* selectFile = new wxFileDialog(this, "Select an Image","","", "*.png");
+ 
+ selectFile->ShowModal();
 }
