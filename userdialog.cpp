@@ -69,10 +69,11 @@ wxBEGIN_EVENT_TABLE(userDialog, wxDialog)
 
 
 void userDialog::onCancel(wxCommandEvent& event){
-  wxMessageDialog* dialog = new wxMessageDialog(this, wxT("No user will be added"), wxT("Question"), wxOK | wxCANCEL);
+  wxMessageDialog* dialog = new wxMessageDialog(this, wxT("No user will be added,Are you sure to continue?"), wxT("Question"), wxOK | wxCANCEL);
 
- dialog->ShowModal();
- Close(true); 
+if(dialog->ShowModal() == wxID_OK)
+  Close(true);
+
 }
 
 void userDialog::onAddUser(wxCommandEvent& event){
@@ -85,6 +86,11 @@ void userDialog::onSelectImage(wxCommandEvent& event){
  //to do: open a file select dialog menu
  
  wxFileDialog* selectFile = new wxFileDialog(this, "Select an Image","","", "*.png");
+ 
+if(selectFile->GetPath() != ""){
+  wxBitmap image(path,wxBITMAP_TYPE_PNG);
+  this->Add(image,-1);
+}
  
  selectFile->ShowModal();
 }
