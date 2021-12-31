@@ -1,5 +1,5 @@
 #include "myapp.h"
-#include "optionframe.h"
+#include "searchframe.h"
 #include <wx/utils.h>   
 #include <wx/splash.h>
 wxIMPLEMENT_APP(myapp);
@@ -16,9 +16,9 @@ bool myapp:: OnInit(){
 }
  wxYield();
  sleep(2);
- optionFrame* options = new optionFrame("UMS");
+ searchFrame* frame = new searchFrame();
  
- options->Show(true);
- SetTopWindow(options); 
+ frame->Show(true);
+ SetTopWindow(frame); 
  return true;
 }
