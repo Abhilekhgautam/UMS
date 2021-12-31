@@ -83,14 +83,10 @@ void userDialog::onAddUser(wxCommandEvent& event){
 }
 
 void userDialog::onSelectImage(wxCommandEvent& event){
- //to do: open a file select dialog menu
+ //to do: view the selected image
  
  wxFileDialog* selectFile = new wxFileDialog(this, "Select an Image","","", "*.png");
  
-if(selectFile->GetPath() != ""){
-  wxBitmap image(path,wxBITMAP_TYPE_PNG);
-  this->Add(image,-1);
-}
  
  selectFile->ShowModal();
 }
