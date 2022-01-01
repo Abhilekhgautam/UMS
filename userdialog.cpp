@@ -84,7 +84,7 @@ void userDialog::onAddUser(wxCommandEvent& event){
 */
 
 //check if all text box are filled at least!
-  if(name_text->GetLineLength(0) < 1 || email_text->GetLineLength(0) < 1 || address_text->GetLineLength(0) < 1){
+  if(name_text->GetLineLength(0) < 1 || email_text->GetLineLength(0) < 1 || address_text->GetLineLength(0) < 1 || phone_text->GetLineLength(0) < 1){
     wxMessageDialog* error_dialog = new wxMessageDialog(this, wxT("All the input fields are necessary"), wxT("Error"), wxOK | wxICON_ERROR);
     error_dialog->ShowModal();
     return;
@@ -134,7 +134,7 @@ void userDialog::onSelectImage(wxCommandEvent& event){
 
  
    wxFileDialog* selectFile = new wxFileDialog(this, "Select an Image","","", "*.png");
-   if(selectFile->ShowModal() == 5100){
+  if(selectFile->ShowModal() == 5100){
      wxString file_path = selectFile->GetPath();
     /*
         
