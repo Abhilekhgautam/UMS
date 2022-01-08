@@ -2,42 +2,80 @@
 #include <wx/sizer.h>
 #include <wx/dcclient.h>
 #include "userdialog.h"
+#include <wx/grid.h>
 
-searchFrame :: searchFrame()
-             : wxFrame(nullptr, wxID_ANY, "" , wxDefaultPosition, wxSize(240, 250), wxDEFAULT_FRAME_STYLE | wxMAXIMIZE){
+searchFrame :: searchFrame(const wxString& Title, wxWindow* parent)
+            : wxFrame(parent, wxID_ANY, Title,  wxDefaultPosition, wxSize(240, 250), wxMAXIMIZE | wxDEFAULT_FRAME_STYLE){
   /*
      TODO:1. Create a good UI
           2. define a drawTable function
           3. Create a button which on click opens the addUser dialog
   */
-  wxGridSizer* my_sizer = new wxGridSizer(1, 4, 0, 1);
-// Search box
+
+  // Search box
  wxTextCtrl* text_box = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(400, 30), wxTE_CAPITALIZE | wxTE_PROCESS_ENTER);
 
- wxButton* search_button = new wxButton(this, wxID_ANY, "Search", wxDefaultPosition, wxDefaultSize);
+ wxButton* search_button = new wxButton(this, wxID_ANY, "Search", wxDefaultPosition, wxSize(70,30));
 
- my_sizer->AddStretchSpacer(1);
- my_sizer->Add(text_box, 1, wxALIGN_CENTER_VERTICAL);
- my_sizer->Add(search_button , 1, wxALIGN_CENTER_VERTICAL);
- my_sizer->AddStretchSpacer(1);
+ 
+ vbox = new wxBoxSizer(wxVERTICAL);
+ hbox = new wxBoxSizer(wxHORIZONTAL);
+ my_grid = new wxGrid(this, wxID_ANY);
+ 
 
- SetSizerAndFit(my_sizer);
-  SetIcon(wxIcon("./media/ums1.png")); 
+
+ hbox->AddStretchSpacer(1); 
+ hbox->Add(text_box, 1, wxEXPAND);
+ hbox->Add(search_button, 0);
+ hbox->AddStretchSpacer(1);
+ 
+ vbox->AddStretchSpacer(1);
+ vbox->Add(hbox);
+ vbox->AddStretchSpacer(2);
+
+ SetSizerAndFit(vbox);
+
+
   Center();
   
- userDialog* new_dialog = new userDialog("Add");
 
 }
 
-wxBEGIN_EVENT_TABLE(searchFrame, wxFrame)
-  EVT_BUTTON(1, searchFrame::onSearchClick)
-  EVT_MENU(wxID_EXIT, searchFrame::onExit)
+wxBEGIN_EVENT_TABLE(searchFrame, wxFrame) 
+ EVT_BUTTON(1, searchFrame::onSearchClick)
+ EVT_MENU(wxID_EXIT, searchFrame::onExit)
 wxEND_EVENT_TABLE()
+
+void searchFrame::showframe(){
+ Show(true);
+}
+
+void searchFrame::drawTable(int row, int col){
+
+wxGrid* my_grid = new wxGrid(this, wxID_ANY);
+
+my_grid->CreateGrid(5,5);
+
+}
 
 void searchFrame::onSearchClick(wxCommandEvent& event){
  /*
    TODO: call the drawTable function
  */
+ 
+ my_grid->CreateGrid(1,5);
+ my_grid->SetColLabelValue(0,"ID");
+ my_grid->SetColLabelValue(1,"Name");
+ my_grid->SetColLabelValue(2,"Email");
+ my_grid->SetColLabelValue(3,"Phone");
+ my_grid->SetColLabelValue(4,"Address"); 
+
+for(int i = 0 ; i < 5 ; i++){
+  my_grid->SetColSize(i, 190);
+}
+
+ vbox->Add(my_grid);
+ 
 
 }
 
