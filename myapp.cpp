@@ -1,10 +1,12 @@
 #include "myapp.h"
+#include "optionframe.h"
 #include "searchframe.h"
 #include <wx/utils.h>   
 #include <wx/splash.h>
 wxIMPLEMENT_APP(myapp);
 
 bool myapp:: OnInit(){
+ wxInitAllImageHandlers();
  wxBitmap bitmap;
 
  if (bitmap.LoadFile("./media/ums_icon.png", wxBITMAP_TYPE_PNG)){
@@ -15,10 +17,10 @@ bool myapp:: OnInit(){
 
 }
  wxYield();
- sleep(2);
- searchFrame* frame = new searchFrame();
+ sleep(3);
+ optionFrame* landingFrame = new optionFrame();
  
- frame->Show(true);
- SetTopWindow(frame); 
+ landingFrame->Show(true);
+ SetTopWindow(landingFrame); 
  return true;
 }
