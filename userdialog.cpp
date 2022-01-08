@@ -1,22 +1,30 @@
 #include <wx/image.h>
+#include <wx/valnum.h>
 #include "userdialog.h"
 
 
-userDialog::userDialog(const wxString& Title)
-           : wxDialog(nullptr, -1, Title, wxDefaultPosition, wxSize(850, 850)){
- 
- wxImage::AddHandler( new wxPNGHandler);
- wxImage::AddHandler(new wxJPEGHandler);
+userDialog::userDialog(const wxString& Title, wxWindow* parent)
+           : wxDialog(parent, -1, Title, wxDefaultPosition, wxSize(530,500)){
+//Creates a Bitmap for the user's profile picture
+ pp = wxBitmap(wxSize(200,190));
 
- wxPanel* panel = new wxPanel(this, -1);
+//initially load the default image for the profile picture
+ pp.LoadFile(wxT("./media/default_pp.jpg"));
+ unsigned long m_value = 98; 
+
+  wxIntegerValidator<unsigned long>
+   val(&m_value, wxNUM_VAL_THOUSANDS_SEPARATOR);
+
+  panel = new wxPanel(this, -1);
  wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
  wxBoxSizer* hbox = new wxBoxSizer(wxHORIZONTAL);
 
  wxStaticBox* name = new wxStaticBox(panel, -1, wxT("Full Name"), wxPoint(15,5), wxSize(250,100));
 
- wxStaticBox* image = new wxStaticBox(panel, -1, wxT("Image"), wxPoint(280, 5), wxSize(200,200));
- imagePanel = new wxPanel(this, -1, wxPoint (285, 25),wxSize(190,175));
- 
+ image = new wxStaticBox(panel, -1, wxT("Image"), wxPoint(280, 5), wxSize(200,230));
+ profile = new wxStaticBitmap (panel, wxID_ANY, pp, wxPoint(280,25),wxSize(200,190));
+ wxButton* select = new wxButton(panel ,1, wxT("Select"), wxPoint(285, 215), wxSize(70,30));
+ wxButton* set_default = new wxButton(panel , 4, wxT("Set default"), wxPoint(365, 215), wxSize(90,30));
 
  name_text = new wxTextCtrl(panel, -1, wxEmptyString,  wxPoint(20,20), wxSize(230, 80));
 
@@ -25,11 +33,11 @@ userDialog::userDialog(const wxString& Title)
 
 
  wxStaticBox* address = new wxStaticBox(panel,-1,wxT("Address"),wxPoint(15, 205),wxSize(250,100));
-address_text = new wxTextCtrl(panel, -1, wxEmptyString,  wxPoint(20,220), wxSize(230, 80));
+ address_text = new wxTextCtrl(panel, -1, wxEmptyString,  wxPoint(20,220), wxSize(230, 80));
 
- wxStaticBox* phone = new wxStaticBox(panel, -1 , wxT("Phone"), wxPoint(280, 205 ), wxSize(250,100));
+ wxStaticBox* phone = new wxStaticBox(panel, -1 , wxT("Phone"), wxPoint(280, 255 ), wxSize(250,100));
 
-phone_text = new wxTextCtrl(panel, -1, wxEmptyString, wxPoint(290, 220), wxSize(230,80)); 
+phone_text = new wxTextCtrl(panel, -1, wxEmptyString, wxPoint(290, 245), wxSize(230,100), 0, val); 
 
  wxStaticBox* gender = new wxStaticBox(panel, -1, wxT("Gender"), wxPoint(15, 305), wxSize(250,100));
   
@@ -65,20 +73,49 @@ wxBEGIN_EVENT_TABLE(userDialog, wxDialog)
    EVT_BUTTON(1, userDialog::onSelectImage)
    EVT_BUTTON(2, userDialog::onAddUser)
    EVT_BUTTON(3, userDialog::onCancel)
+   EVT_BUTTON(4, userDialog::onSetDefault)
+   EVT_CLOSE(userDialog::onQuit)
  wxEND_EVENT_TABLE()
 
+void userDialog::onSetDefault(wxCommandEvent& event){
+
+ setProfile("./media/default_pp.jpg");
+
+}
+
+void userDialog::setProfile(wxString filename){
+ pp = wxBitmap(wxSize(200,190));
+ if(pp.LoadFile(filename)){
+   if (pp.GetHeight() > 210 || pp.GetWidth() > 210){
+    wxMessageDialog* dialog = new wxMessageDialog(this, wxT("Image too large, 200 px image is required"), wxT("Image too large"), wxOK);
+    if(dialog->ShowModal() == wxID_OK){
+      return;
+    }
+  }
+ }
+ profile->SetBitmap(pp);
+
+}
+
+void userDialog::onQuit(wxCloseEvent& event){
+ 
+ wxMessageDialog* quitWarn = new wxMessageDialog(this, wxT("No user will be added,Do you want to Continue?"),wxT("Exit"), wxOK | wxCANCEL);
+
+ if(quitWarn->ShowModal() == wxID_OK)
+   Destroy();   
+}
 
 void userDialog::onCancel(wxCommandEvent& event){
-  wxMessageDialog* dialog = new wxMessageDialog(this, wxT("No user will be added,Are you sure to continue?"), wxT("Question"), wxOK | wxCANCEL);
+  wxMessageDialog* dialog = new wxMessageDialog(this, wxT("No user will be added,Are you sure to continue?"), wxT("Exit"), wxOK | wxCANCEL);
 
 if(dialog->ShowModal() == wxID_OK)
-  Close(true);
+  Destroy();
 
 }
 
 void userDialog::onAddUser(wxCommandEvent& event){
 /*
-  TODO:1.Check if all the textbox are filled
+  Functionality:1.Check if all the textbox are filled
        2.Minor check for email 'check for @ and . symbol'
        3.Check the length of phone number
 */
@@ -106,7 +143,7 @@ void userDialog::onAddUser(wxCommandEvent& event){
 
  }
 
-//check if phone number has 10 digits
+//check if phone number is valid
 /*
   TODO: Check if all the input characters are integer
 */
@@ -118,7 +155,7 @@ void userDialog::onAddUser(wxCommandEvent& event){
 
  }  
 // Informs the user that if everything goes well a new user will be added
- wxMessageDialog* dialog = new wxMessageDialog(this, wxT("A new user will be added"), wxT("Question"), wxOK | wxCANCEL);
+ wxMessageDialog* dialog = new wxMessageDialog(this, wxT("A new user will be added"), wxT("Confirm"), wxOK | wxCANCEL);
  if(dialog->ShowModal() == wxOK){
   /*
     TODO: 1. Call the User's C'tor to create a new user
@@ -133,13 +170,25 @@ void userDialog::onAddUser(wxCommandEvent& event){
 void userDialog::onSelectImage(wxCommandEvent& event){
 
  
-   wxFileDialog* selectFile = new wxFileDialog(this, "Select an Image","","", "*.png");
+   wxFileDialog* selectFile = new wxFileDialog(this, "Select an Image","","", "`PNG and JPEG files (*.png; *jpg)|*.png;*.jpg");
   if(selectFile->ShowModal() == 5100){
      wxString file_path = selectFile->GetPath();
     /*
         
-       TODO: display the selected image
+       
+   Function: displays the selected image
    */
+  wxBitmap pp;
+ if(pp.LoadFile(file_path)){
+   if (pp.GetHeight() > 210 || pp.GetWidth() > 210){
+    wxMessageDialog* dialog = new wxMessageDialog(this, wxT("Image too large, 200 px image is required"), wxT("Image too large"), wxOK);
+    if(dialog->ShowModal() == wxID_OK){
+      return;
+    }
   }
-   
+ }
+
+  profile->SetBitmap(pp); 
+
+  }
 }
