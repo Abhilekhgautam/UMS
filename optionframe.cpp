@@ -3,7 +3,6 @@
 #include "userdialog.h"
 #include <wx/sizer.h>
 #include <wx/colour.h>
-#include "imagepanel.h"
 //main frame of app that is parent of every window/frames
 
 //frame responsible to display options (buttons) to the users
@@ -35,7 +34,7 @@ optionFrame::optionFrame()
 // auto adjust the size of the sizer
   SetSizerAndFit(option_sizer);
 
-  SetBackgroundColour(wxT("white"));  
+  SetBackgroundColour(wxT("black"));  
  
   Centre();
 // set icon in the taskbar
