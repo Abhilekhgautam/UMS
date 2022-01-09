@@ -2,7 +2,6 @@
 #include <wx/valnum.h>
 #include "userdialog.h"
 
-
 userDialog::userDialog(const wxString& Title, wxWindow* parent)
            : wxDialog(parent, -1, Title, wxDefaultPosition, wxSize(530,500)){
 //Creates a Bitmap for the user's profile picture
@@ -136,7 +135,7 @@ void userDialog::onAddUser(wxCommandEvent& event){
    len ++;
  }
  
- if(count != 2 || len < 8 ){
+ if(count < 2 || len < 8 ){
   wxMessageDialog* error_dialog = new wxMessageDialog(this, wxT(" Your email is invalid "), wxT("Error"), wxOK | wxICON_ERROR);
     error_dialog->ShowModal();
     return;
@@ -163,7 +162,12 @@ void userDialog::onAddUser(wxCommandEvent& event){
           3. Check if the data is successfully added to the file in case of failure inform the user about failure
           4. Informs the user that a user has been successfully added to the file
           5. Clear all the input field
-  */ 
+  */
+//*conversion from wxString to string
+  /*std::string name = std::string(name_text->GetLineText(0).mb_str());
+  std::string email =  std::string(email_text->GetLineText(0).mb_str());
+  std::string address = std::string(address->text->GetLineText(0).mb_str());
+   */
  } 
 }
 
