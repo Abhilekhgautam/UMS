@@ -1,4 +1,26 @@
 #include "SQLite.h"
+#include<time.h>
+
+string idGenerator(){
+    // Making string of year
+    time_t now = time(0);
+    char year[4];
+    strftime(year, 100, "%y", localtime(&now));
+    string stryear (year);
+
+    // Getting user number from table
+    User usr;
+    int num = usr.rowNumber();
+    // cout<<num<<endl;
+    int n = 1000 +num +2;
+    // cout<<n<<endl;
+    
+    // Concatinate two string
+    string id = stryear + to_string(n);
+    
+    // Returning id
+    return id;
+}
 
 class User{
     // User Informations
@@ -8,24 +30,43 @@ class User{
     string address;
     string phone;
     string gender;
+    string old_name;
 
     public:
+    // Set default constructor
+    User(){}
 
-    void addUser(string id, string name, string email, string address, string phone, string gender);
+    // Make a constructor to accept parameters
+    User(string name, string email, string address, string phone, string gender);
 
-    RData displayAllUser();
+    bool addUser();
+
+    RData* displayAllUser();
 
     RData displayUser(string name);
 
-    void removeUser(string name);
+    bool removeUser(string name);
 
-    void updateUser(string name, string email, string address, string phone);
+    bool updateUser(string old_name);
 
     int rowNumber();
 
     bool isPresent(string name);
 
 };
+
+// Make a constructor to accept parameters
+// Data from front-end comes here
+User::User(string name, string email, string address, string phone, string gender){
+    // Assigining values to object
+    this->name = name;
+    this->email = email;
+    this->address = address;
+    this->phone = phone;
+    this->gender = gender;
+    // Also generate id here
+    this->id = idGenerator();
+}
 
 // Returning presence status
 bool User::isPresent(string name){
@@ -45,34 +86,34 @@ int User::rowNumber(){
 }
 
 // Updating user 
-void User::updateUser(string name, string email, string address, string phone){
+bool User::updateUser(string old_name){
     // Asssigning values
-    this->name = name;
-    this->email = email;
-    this->address = address;
-    this->phone = phone;
+    this->old_name = old_name;
+    bool success;
 
     // Open, send request and close DB
     // Update name with new infos in db
     SQLite sqldb;
-    sqldb.updateRow(name.c_str(), email.c_str(), address.c_str(), phone.c_str());
+    success = sqldb.updateRow(old_name.c_str(), name.c_str(), email.c_str(), address.c_str(), phone.c_str(), gender.c_str());
     sqldb.closeDB();
+    return success;
 }
 
 // Remove user by its name
-void User::removeUser(string name){
+bool User::removeUser(string name){
     this->name = name;
+    bool success;
 
     // Opening, requesting and closing DB
     SQLite sqldb;
-    sqldb.removeRow(name.c_str());
+    success = sqldb.removeRow(name.c_str());
     sqldb.closeDB();
+    return success;
 }
 
 // Display user by its name
 RData User::displayUser(string name){
     this->name = name;
-
     // Opening, requesting and closing DB
     SQLite sqldb;
     RData rdata;
@@ -82,34 +123,29 @@ RData User::displayUser(string name){
 }
 
 // Display all the users from DB
-RData User::displayAllUser(){
+RData* User::displayAllUser(){
     // Opening, requesting and closing DB
+    int row_num = rowNumber();
     SQLite sqldb;
+    // Declearing object to return data
+    rdatas = new RData[row_num * sizeof(RData)];
     RData rdta;
-    // rdta = (RData*) malloc(10*sizeof(RData));
     rdta = sqldb.displayTable();
-    count = 0;
-    
     // cout<<sqldb.returnNoOfRow()<<endl;
     // cout<<"in uhandle"<<endl;
     // (rdta )->display();
     sqldb.closeDB();
-    return rdta;
+    return rdatas;
 }
 
 // Adding user into DB
-void User::addUser(string id, string name, string email, string address, string phone, string gender){
-    // Assigining values to object
-    this->id = id;
-    this->name = name;
-    this->email = email;
-    this->address = address;
-    this->phone = phone;
-    this->gender = gender;
-
+// Also return success message back 
+bool User::addUser(){
+    bool success;
     // Opening DB and passing infos
     SQLite sqldb;
-    sqldb.createTable();
-    sqldb.insertData(id.c_str(), name.c_str(), email.c_str(), address.c_str(), phone.c_str(), gender.c_str());
+    if(success = sqldb.createTable());
+        success = sqldb.insertData(id.c_str(), name.c_str(), email.c_str(), address.c_str(), phone.c_str(), gender.c_str());
     sqldb.closeDB();
+    return success;
 }
