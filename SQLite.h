@@ -64,16 +64,16 @@ class RData{
         strcpy(gender, argv[5]);
 
     }
-    void display(){
-        // cout<<"from main"<<endl;
-        cout<<"ID = "<<id<<endl;
-        cout<<"Name = "<<name<<endl;
-        cout<<"Email = "<<email<<endl;
-        cout<<"Address = "<<address<<endl;
-        cout<<"Phone = "<<phone<<endl;
-        cout<<"Gender = "<<gender<<endl;
-        cout<<endl;
-    }
+    // void display(){
+    //     // cout<<"from main"<<endl;
+    //     cout<<"ID = "<<id<<endl;
+    //     cout<<"Name = "<<name<<endl;
+    //     cout<<"Email = "<<email<<endl;
+    //     cout<<"Address = "<<address<<endl;
+    //     cout<<"Phone = "<<phone<<endl;
+    //     cout<<"Gender = "<<gender<<endl;
+    //     cout<<endl;
+    // }
 };
 
 class SQLite{
@@ -111,10 +111,10 @@ class SQLite{
     void closeDB();
 
     // Creating DB table
-    void createTable();
+    bool createTable();
 
     // Insert data into table
-    void insertData(const char* id, const char* name, const char* email, const char* address, const char* phone, const char* gender);
+    bool insertData(const char* id, const char* name, const char* email, const char* address, const char* phone, const char* gender);
 
     // Display all the data of table
     RData displayTable();
@@ -123,10 +123,10 @@ class SQLite{
     RData displayRow(const char* name);
 
     // Remove the specific user
-    void removeRow(const char* name);
+    bool removeRow(const char* name);
 
     // Update the specific user
-    void updateRow(const char* name, const char* email, const char* address, const char* phone);
+    bool updateRow(const char* name,const char* new_name, const char* email, const char* address, const char* phone, const char* gender);
 
     int returnNoOfRow();
 
@@ -191,11 +191,12 @@ int SQLite::returnNoOfRow(){
 }
 
 // Update a row by its name
-void SQLite::updateRow(const char* name, const char* email, const char* address, const char* phone){
+bool SQLite::updateRow(const char* name,const char* new_name, const char* email, const char* address, const char* phone, const char* gender){
     // SQL command
     char * query = NULL;
+    bool success=true;
 
-    asprintf(&query, "UPDATE USERS SET EMAIL='%s', ADDRESS='%s', PHONE='%s' WHERE NAME='%s';", email, address, phone, name);
+    asprintf(&query, "UPDATE USERS SET NAME='%s', EMAIL='%s', ADDRESS='%s', PHONE='%s' GENDER='%s' WHERE NAME='%s';", new_name, email, address, phone, gender, name);
 
     // cout<<"Query = "<<query<<endl;
 
@@ -206,6 +207,9 @@ void SQLite::updateRow(const char* name, const char* email, const char* address,
     // Testing the statement
     rOpening = sqlite3_step(stmt);
     // cout<<"After testing rOpening = "<<rOpening<<endl;
+    if(rOpening != 101){
+        success=false;
+    }
 
     // Final the statement
     sqlite3_finalize(stmt);
@@ -213,12 +217,14 @@ void SQLite::updateRow(const char* name, const char* email, const char* address,
     // Free the space of query
     free(query);
     // cout<<"Query after free: "<<query<<endl;
+    return success;
 }
 
 // Remove a row by name
-void SQLite::removeRow(const char* name){
+bool SQLite::removeRow(const char* name){
     // SQL command
     char * query = NULL;
+    bool success = true;
 
     asprintf(&query, "DELETE FROM USERS WHERE NAME='%s';", name);
     // cout<<"query = "<<query<<endl;
@@ -226,6 +232,10 @@ void SQLite::removeRow(const char* name){
     // Run sql
     rOpening = sqlite3_exec(db, query, callback, 0, &aErrMsg);
     // cout<<"rOpening = "<<rOpening<<endl;
+    if(rOpening != 0){
+        success = false;
+    }
+    return success;
 }
 
 // Display a row by name
@@ -264,9 +274,10 @@ RData SQLite::displayTable(){
 }
 
 // Insert al the data into table
-void SQLite::insertData(const char* id, const char* name, const char* email, const char* address, const char* phone, const char* gender){
+bool SQLite::insertData(const char* id, const char* name, const char* email, const char* address, const char* phone, const char* gender){
     // SQL query
     char * query = NULL;
+    bool success=true;
 
     // Making single string of command and asign into query
     asprintf(&query, "INSERT INTO USERS(ID, NAME, EMAIL, ADDRESS, PHONE, GENDER) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');", id, name, email, address, phone, gender);
@@ -276,11 +287,13 @@ void SQLite::insertData(const char* id, const char* name, const char* email, con
     sqlite3_prepare(db, query, strlen(query), &stmt, NULL);
     // cout<<"SQL statement = "<<stmt<<endl;
 
-    //  rOpening = sqlite3_exec(db, query, callback, 0, &aErrMsg);
-
     // Testing the statement
     rOpening = sqlite3_step(stmt);
     // cout<<"After testing rOpening = "<<rOpening<<endl;
+
+    if(rOpening != 101){
+        success=false;
+    }
 
     // Final the statement
     sqlite3_finalize(stmt);
@@ -288,14 +301,15 @@ void SQLite::insertData(const char* id, const char* name, const char* email, con
     // Free the space of query
     free(query);
     // cout<<"Query after free: "<<query<<endl;
+    return success;
 }
 
 // Creating DB table
-void SQLite::createTable(){
+bool SQLite::createTable(){
     // SQL command to create table
     sql = "CREATE TABLE IF NOT EXISTS USERS("
             "ID INT PRIMARY KEY NOT NULL UNIQUE, "
-            "NAME TEXT NOT NULL UNIQUE, "
+            "NAME TEXT NOT NULL, "
             "EMAIL TEXT NOT NULL UNIQUE, "
             "ADDRESS TEXT NOT NULL, "
             "PHONE CHAR(15) NOT NULL UNIQUE, "
@@ -304,6 +318,11 @@ void SQLite::createTable(){
     // Run the sql
     rOpening = sqlite3_exec(db, sql, callback, 0, &aErrMsg);
     // cout<<"After running command rOpening = "<<rOpening<<endl;
+    bool success=true;
+    if(rOpening != 0){
+        success=false;
+    }
+    return success;
 }
 
 // Open connection
