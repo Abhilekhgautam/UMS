@@ -8,7 +8,7 @@ wxWidgets can be installed from - [here](https://docs.wxwidgets.org/trunk/overvi
 
 # Compilation
 
-For linux:
+For Linux based operating system:
 
  ```
  g++ `wx-config --cxxflags` -o myapp *.cpp `wx-config --libs`
