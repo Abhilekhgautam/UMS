@@ -186,6 +186,7 @@ void userDialog::onAddUser(wxCommandEvent& event){
   std::string address = std::string(address_text->GetLineText(0).mb_str());
   std::string phone = std::string(phone_text->GetLineText(0).mb_str());
   std::string gender;
+  std::string image_path = std::string(file_path.mb_str());
   if(gen_male -> GetValue()){
    std::string gender = "male"
   }
@@ -198,7 +199,7 @@ void userDialog::onAddUser(wxCommandEvent& event){
 
 /*
 
- User* user = new User(name, email, address, phone, gender, file_path);
+ User* user = new User(name, email, address, phone, gender, image_path);
   
  //call the function to add to the database
  
