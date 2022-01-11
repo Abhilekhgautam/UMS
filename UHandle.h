@@ -44,6 +44,7 @@ User::User(string name, string email, string address, string phone, string gende
     this->address = address;
     this->phone = phone;
     this->gender = gender;
+    // std::cout<<name;
     // Also generate id here
     // Making string of year
     time_t now = time(0);
@@ -60,6 +61,14 @@ User::User(string name, string email, string address, string phone, string gende
     
     // Concatinate two string
     this->id = stryear + to_string(n);
+        // cout<<"ID = "<<id<<endl;
+        // cout<<"Name = "<<name<<endl;
+        // cout<<"Email = "<<email<<endl;
+        // cout<<"Address = "<<address<<endl;
+        // cout<<"Phone = "<<phone<<endl;
+        // cout<<"Gender = "<<gender<<endl;
+        // cout<<endl;
+
 }
 
 // Returning presence status
@@ -135,11 +144,13 @@ RData* User::displayAllUser(){
 // Adding user into DB
 // Also return success message back 
 bool User::addUser(){
-    bool success;
+    bool success=false;
     // Opening DB and passing infos
     SQLite sqldb;
-    if(success = sqldb.createTable());
+    if(sqldb.createTable()){
+
         success = sqldb.insertData(id.c_str(), name.c_str(), email.c_str(), address.c_str(), phone.c_str(), gender.c_str());
+    }
     sqldb.closeDB();
     return success;
 }
