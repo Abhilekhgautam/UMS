@@ -1,4 +1,4 @@
-#include<iostream>
+# include <iostream>
 #include<string.h>
 #include<sqlite3.h>
 // #include<vector>
@@ -139,7 +139,7 @@ class SQLite{
 };
 
 RData *rdatas;
-static int count = 0;
+static int user_count = 0;
 
 // Return either name is in DB or not
 bool SQLite::searchRow(const char* name){
@@ -391,7 +391,7 @@ int SQLite::callbackAll(void *fArg, int argc, char **argv, char **azColName){
         char* gender = new char[strlen(argv[5]) + 1];
         strcpy(gender, argv[5]);
 
-        rdatas[count].append(id, name, email, address, phone, gender);
+        rdatas[user_count].append(id, name, email, address, phone, gender);
         rd->append(id, name, email, address, phone, gender);
 
         delete [] id;
@@ -401,7 +401,7 @@ int SQLite::callbackAll(void *fArg, int argc, char **argv, char **azColName){
         delete [] phone;
         delete [] gender;
 
-    ++count;
+    ++user_count;
     // cout<<count<<endl;
 
     // Returning success
