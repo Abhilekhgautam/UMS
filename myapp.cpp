@@ -1,6 +1,6 @@
 #include "myapp.h"
 #include "optionframe.h"
-#include "searchframe.h"
+#include "searchdialog.h"
 #include <wx/utils.h>   
 #include <wx/splash.h>
 wxIMPLEMENT_APP(myapp);
