@@ -1,26 +1,6 @@
 #include "SQLite.h"
 #include<time.h>
-
-string idGenerator(){
-    // Making string of year
-    time_t now = time(0);
-    char year[4];
-    strftime(year, 100, "%y", localtime(&now));
-    string stryear (year);
-
-    // Getting user number from table
-    User usr;
-    int num = usr.rowNumber();
-    // cout<<num<<endl;
-    int n = 1000 +num +2;
-    // cout<<n<<endl;
-    
-    // Concatinate two string
-    string id = stryear + to_string(n);
-    
-    // Returning id
-    return id;
-}
+class User;
 
 class User{
     // User Informations
@@ -65,7 +45,21 @@ User::User(string name, string email, string address, string phone, string gende
     this->phone = phone;
     this->gender = gender;
     // Also generate id here
-    this->id = idGenerator();
+    // Making string of year
+    time_t now = time(0);
+    char year[4];
+    strftime(year, 100, "%y", localtime(&now));
+    string stryear (year);
+
+    // Getting user number from table
+    User usr;
+    int num = usr.rowNumber();
+    // cout<<num<<endl;
+    int n = 1000 +num +2;
+    // cout<<n<<endl;
+    
+    // Concatinate two string
+    this->id = stryear + to_string(n);
 }
 
 // Returning presence status
