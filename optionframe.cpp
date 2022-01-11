@@ -1,5 +1,5 @@
 #include "optionframe.h"
-#include "searchframe.h"
+#include "searchdialog.h"
 #include "userdialog.h"
 #include <wx/sizer.h>
 #include <wx/colour.h>
@@ -11,6 +11,19 @@ optionFrame::optionFrame()
   
   wxBitmap image;
   image.LoadFile("./media/ums_banner_large.png");
+
+ //buttons with images at the bottom of the frame
+  wxBitmap add_icon;
+  wxBitmap delete_icon;
+  wxBitmap search_icon;
+  wxBitmap update_icon;
+
+  update_icon.LoadFile("./media/update-user.png");
+  search_icon.LoadFile("./media/search-user.png");
+  delete_icon.LoadFile("./media/delete_user.png");
+  add_icon.LoadFile("./media/add_user.png");
+
+ 
   wxStaticBitmap* banner = new wxStaticBitmap(this, wxID_ANY, image);
 
   // Buttons 
@@ -19,7 +32,19 @@ optionFrame::optionFrame()
   wxButton* searchUser = new wxButton(this, 7, "Search  User", wxDefaultPosition, wxSize(400, 70));
   wxButton* updateUser = new wxButton(this, 8, "Update  User", wxDefaultPosition, wxSize(400,70)); 
   wxButton* exit = new wxButton(this, 9, "Exit", wxDefaultPosition, wxSize(400,70));
+
+  wxBitmapButton* add_user = new wxBitmapButton(this, 5, add_icon, wxDefaultPosition, wxSize(120,120));
+  wxBitmapButton* delete_user = new wxBitmapButton(this, 6, delete_icon, wxDefaultPosition, wxSize(120,120));
+  wxBitmapButton* search_user = new wxBitmapButton(this, 7, search_icon, wxDefaultPosition, wxSize(120,120));
+  wxBitmapButton* update_user = new wxBitmapButton(this, 8, update_icon, wxDefaultPosition, wxSize(120,120));
+
   wxBoxSizer* option_sizer = new wxBoxSizer(wxVERTICAL);
+  wxBoxSizer* icon_sizer = new wxBoxSizer(wxHORIZONTAL);
+
+  icon_sizer->Add(add_user,1 , wxALIGN_CENTER);
+  icon_sizer->Add(delete_user,1, wxALIGN_CENTER);
+  icon_sizer->Add(search_user,1, wxALIGN_CENTER);
+  icon_sizer->Add(update_user,1, wxALIGN_CENTER);  
 
  // Center the button in the frame 
   option_sizer->Add(banner, 1, wxALIGN_CENTER | wxALIGN_CENTER_HORIZONTAL);
@@ -29,7 +54,8 @@ optionFrame::optionFrame()
   option_sizer->Add(deleteUser, 0, wxALIGN_CENTER | wxALIGN_CENTER_HORIZONTAL);  
   option_sizer->Add(searchUser, 0, wxALIGN_CENTER | wxALIGN_CENTER_HORIZONTAL);
   option_sizer->Add(exit, 0, wxALIGN_CENTER | wxALIGN_CENTER_HORIZONTAL);
-  option_sizer->AddStretchSpacer(1); 
+  
+  option_sizer->Add(icon_sizer, 1, wxALIGN_CENTER | wxALIGN_CENTER_HORIZONTAL);
   
 // auto adjust the size of the sizer
   SetSizerAndFit(option_sizer);
@@ -53,8 +79,8 @@ void optionFrame::searchUserClick(wxCommandEvent& event){
 /*
   TODO: open a search user frame
 */
-  searchFrame* searchUser = new searchFrame("Search", this);
-  searchUser->Show();
+  searchDialog* searchUser = new searchDialog(this, "Search");
+  searchUser->showDialog();
 }
 
 void optionFrame::updateUserClick(wxCommandEvent& event){
@@ -63,8 +89,8 @@ void optionFrame::updateUserClick(wxCommandEvent& event){
   TODO: open the dialog box to update User
 */
 
- searchFrame* updateUser = new searchFrame("Update", this);
- updateUser->Show();
+ searchDialog* updateUser = new searchDialog(this,"Update");
+ updateUser->showDialog();
 
 }
 
@@ -73,8 +99,8 @@ void optionFrame::deleteUserClick(wxCommandEvent& event){
 /*
   TODO: open a search frame that alows the user to be deleted
 */
- searchFrame* deleteUser = new searchFrame("Delete", this);
- deleteUser->Show();
+ searchDialog* deleteUser = new searchDialog(this, "Delete");
+ deleteUser->showDialog();
 }
 
 void optionFrame::exit(wxCommandEvent& event){
