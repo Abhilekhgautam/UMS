@@ -10,6 +10,7 @@ class userDialog : public wxDialog{
   void onCancel(wxCommandEvent& event);
   void onQuit(wxCloseEvent& event);  
 
+  wxString file_path;
   wxBitmap pp;
   wxStaticBitmap* profile;  
   wxPanel* panel;
