@@ -1,7 +1,7 @@
+//#include "UHandle.h"
 #include <wx/image.h>
 #include <wx/valnum.h>
 #include "userdialog.h"
-#include "UHandle.h"
 
 userDialog::userDialog(const wxString& Title, wxWindow* parent)
            : wxDialog(parent, -1, Title, wxDefaultPosition, wxSize(530,500)){
@@ -173,7 +173,6 @@ void userDialog::onAddUser(wxCommandEvent& event){
 // Informs the user that if everything goes well a new user will be added
  wxMessageDialog* dialog = new wxMessageDialog(this, wxT("A new user will be added"), wxT("Confirm"), wxOK | wxCANCEL);
  if(dialog->ShowModal() == wxID_OK){
-
   /*
     TODO: 1. Call the User's C'tor to create a new user
           2. Add the new data to the file
@@ -181,16 +180,8 @@ void userDialog::onAddUser(wxCommandEvent& event){
           4. Informs the user that a user has been successfully added to the file
           5. Clear all the input field
   */
-
-  /*conversion from wxString to string
-    std::string name = std::string(name_text->GetLineText(0).mb_str());
-    std::string email =  std::string(email_text->GetLineText(0).mb_str());
-    std::string address = std::string(address_text->GetLineText(0).mb_str());
-    std::string phone = std::string(phone_text->GetLineText(0).mb_str());
-    std::string gender = "male";
-   
-//conversion from wxString to string
-  std::string name = std::string(name_text->GetLineText(0).mb_str());
+//*conversion from wxString to string
+  /*std::string name = std::string(name_text->GetLineText(0).mb_str());
   std::string email =  std::string(email_text->GetLineText(0).mb_str());
   std::string address = std::string(address_text->GetLineText(0).mb_str());
   std::string phone = std::string(phone_text->GetLineText(0).mb_str());
@@ -204,21 +195,16 @@ void userDialog::onAddUser(wxCommandEvent& event){
  }
   else
    std::string gender = "other"
-   
+   */
 
+/*
 
-
- User* user = new User(name, email, address, phone, gender);
+ User* user = new User(name, email, address, phone, gender, image_path);
   
-
  //call the function to add to the database
-
- // First call the constructor of User class
-  User usr(name, email, address, phone, gender);
  
  // this call should return a success or failure message 
-
-  bool success = usr.addUser();
+  bool success = User->addUser()
 
    if(!success){
     
@@ -231,10 +217,11 @@ void userDialog::onAddUser(wxCommandEvent& event){
     wxMessageDialog* success = new wxMessageDialog(this, "User Added Successfully", "Success", wxOK);
        if(success->ShowModal() == wxID_OK){
         //destroys the addUser dialog
-         Destroy();
+         Destroy()
     }  
    }
    
+*/
  } 
 }
 
