@@ -173,7 +173,11 @@ void userDialog::onAddUser(wxCommandEvent& event){
  }  
 // Informs the user that if everything goes well a new user will be added
  wxMessageDialog* dialog = new wxMessageDialog(this, wxT("A new user will be added"), wxT("Confirm"), wxOK | wxCANCEL);
- if(dialog->ShowModal() == wxOK){
+
+//  std::cout<<"Test"<<endl;
+
+ if(dialog->ShowModal() == wxID_OK){
+  //  cout<<"Enter ok"<<endl;
   /*
     TODO: 1. Call the User's C'tor to create a new user
           2. Add the new data to the file
@@ -197,6 +201,8 @@ void userDialog::onAddUser(wxCommandEvent& event){
  // this call should return a success or failure message 
   bool success = usr.addUser();
 
+  // std::cout<<success<<endl;
+    // cout<<"Success....."<<endl;
    if(!success){
     
    wxMessageDialog* warning = new wxMessageDialog(this, "Cannot add User", "Error", wxOK);
