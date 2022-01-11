@@ -58,7 +58,7 @@ optionFrame::optionFrame()
   option_sizer->Add(icon_sizer, 1, wxALIGN_CENTER | wxALIGN_CENTER_HORIZONTAL);
   
 // auto adjust the size of the sizer
-  SetSizerAndFit(option_sizer);
+  SetSizer(option_sizer);
 
   SetBackgroundColour(wxT("black"));  
  
