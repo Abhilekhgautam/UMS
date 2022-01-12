@@ -5,5 +5,5 @@ class umsTable : public wxGrid{
  int r,c;
  public:
   umsTable(wxWindow*,int rows, int cols);
-
+  void createTable();
 };

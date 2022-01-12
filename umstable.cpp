@@ -3,9 +3,14 @@
 umsTable :: umsTable(wxWindow* parent, int rows, int cols)
           : wxGrid(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize){
 
-    
+  r = rows;
+  c = cols;    
 
-    CreateGrid(rows,6);
+
+}
+
+void umsTable :: createTable(){
+
  
     SetColLabelValue(0, "ID");
     SetColLabelValue(1, "Name");
