@@ -3,6 +3,7 @@
 #include "userdialog.h"
 #include <wx/sizer.h>
 #include <wx/colour.h>
+#include "deleteframe.h"
 //main frame of app that is parent of every window/frames
 
 //frame responsible to display options (buttons) to the users
@@ -72,7 +73,8 @@ void optionFrame::addUserClick(wxCommandEvent& event){
  /*
   TODO: open the dialog box to add Users
  */
-  userDialog* addUser = new userDialog("Add User", this);
+  userDialog* addUser = new userDialog("Add", this);
+  addUser->showDialog();
 }
 
 void optionFrame::searchUserClick(wxCommandEvent& event){
@@ -99,7 +101,7 @@ void optionFrame::deleteUserClick(wxCommandEvent& event){
 /*
   TODO: open a search frame that alows the user to be deleted
 */
- searchDialog* deleteUser = new searchDialog(this, "Delete");
+ deleteFrame* deleteUser = new deleteFrame(this);
  deleteUser->showDialog();
 }
 
