@@ -14,7 +14,7 @@ void deleteFrame :: onButtonClick(wxCommandEvent& event){
  }
 
   //get the text box item
-  std::string search_text = searchBox -> GetLineText(0);
+  std::string search_text = std::string(searchBox -> GetLineText(0).mb_str());
  
   //search if the name is present
    /*
