@@ -1,4 +1,5 @@
 #include "umstable.h"
+#include "updatedialog.h"
 
 umsTable :: umsTable(wxWindow* parent, int rows, int cols)
           : wxGrid(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize){
@@ -28,3 +29,13 @@ void umsTable :: createTable(){
     SetColSize(5, 150);
 
 }
+/*
+void umsTable :: onCellClick(wxGridEvent& event){
+
+  updateDialog* update = new updateDialog(this);
+  update->showDialog(); 
+}
+*/
+//wxBEGIN_EVENT_TABLE(umsTable, wxGrid)
+ //EVT_GRID_CELL_LEFT_CLICK(umsTable :: onCellClick)
+//wxEND_EVENT_TABLE()
