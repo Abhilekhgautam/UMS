@@ -99,7 +99,7 @@ void updateDialog:: onBtnClick(wxCommandEvent& event){
       else if (gen_female -> GetValue()) gender = "Female";
       else gender = "Others";
 
-       std::string image_path = selectFile->GetFilePath();
+       std::string image_path = std::string(selectFile->GetPath().mb_str());
       /*
          TODO:1.Call the updateUser function and pass above data
 

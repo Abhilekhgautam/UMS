@@ -17,7 +17,11 @@
 #endif
 
 deleteDialog :: deleteDialog (wxWindow* parent, testUser& usr, wxString title)
-              : updateDialog(parent, title,  usr){}
+              : updateDialog(parent, title,  usr){
+
+
+
+}
 
 void deleteDialog :: showDialog(){
 
