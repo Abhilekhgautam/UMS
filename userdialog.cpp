@@ -10,11 +10,7 @@ userDialog::userDialog(const wxString& Title, wxWindow* parent)
 
 //initially load the default image for the profile picture
  pp.LoadFile(wxT("./media/default_pp.jpg"));
- unsigned long m_value = 98; 
 
-//Validator for the phone number input
-  wxIntegerValidator<unsigned long>
-   val(&m_value, wxNUM_VAL_THOUSANDS_SEPARATOR);
 
  panel = new wxPanel(this, -1);
  wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
@@ -42,7 +38,7 @@ userDialog::userDialog(const wxString& Title, wxWindow* parent)
 
  wxStaticBox* phone = new wxStaticBox(panel, -1 , wxT("Phone"), wxPoint(280, 255 ), wxSize(250,100));
 
-phone_text = new wxTextCtrl(panel, -1, wxEmptyString, wxPoint(290, 245), wxSize(230,100), 0, val); 
+ phone_text = new wxTextCtrl(panel, -1, wxEmptyString, wxPoint(290, 245), wxSize(230,100)); 
 
  wxStaticBox* gender = new wxStaticBox(panel, -1, wxT("Gender"), wxPoint(15, 305), wxSize(250,100));
   
@@ -58,7 +54,7 @@ phone_text = new wxTextCtrl(panel, -1, wxEmptyString, wxPoint(290, 245), wxSize(
 //Input field ends here
 
 
- wxButton* addButton = new wxButton(this, 2, wxT("Add"), wxDefaultPosition, wxSize(70, 30));
+ wxButton* addButton = new wxButton(this, 2, Title, wxDefaultPosition, wxSize(70, 30));
 
  wxButton* cancelButton = new wxButton (this, 3, wxT("Cancel"), wxDefaultPosition, wxSize(70, 30));
 
@@ -74,16 +70,12 @@ phone_text = new wxTextCtrl(panel, -1, wxEmptyString, wxPoint(290, 245), wxSize(
 //Center the dialogbox
  Centre();
 
-//display the dialogbox
- ShowModal();
- 
- Destroy();
 
 }
 
 wxBEGIN_EVENT_TABLE(userDialog, wxDialog)
    EVT_BUTTON(1, userDialog::onSelectImage)
-   EVT_BUTTON(2, userDialog::onAddUser)
+   EVT_BUTTON(2, userDialog::onBtnClick)
    EVT_BUTTON(3, userDialog::onCancel)
    EVT_BUTTON(4, userDialog::onSetDefault)
    EVT_CLOSE(userDialog::onQuit)
@@ -112,10 +104,17 @@ void userDialog::setProfile(wxString filename){
 
 }
 
+void userDialog :: showDialog(){
+
+ ShowModal();
+ Destroy();
+
+}
+
 //Event handler for the exit event
 void userDialog::onQuit(wxCloseEvent& event){
  
- wxMessageDialog* quitWarn = new wxMessageDialog(this, wxT("No user will be added,Do you want to Continue?"),wxT("Exit"), wxOK | wxCANCEL);
+ wxMessageDialog* quitWarn = new wxMessageDialog(this, wxT("Are you sure to Exit?"),wxT("Exit"), wxOK | wxCANCEL);
 
  if(quitWarn->ShowModal() == wxID_OK)
    Destroy();   
@@ -129,7 +128,7 @@ if(dialog->ShowModal() == wxID_OK)
 
 }
 
-void userDialog::onAddUser(wxCommandEvent& event){
+void userDialog::onBtnClick(wxCommandEvent& event){
 /*
   Functionality:1.Check if all the textbox are filled
        2.Minor check for email 'check for @ and . symbol'
@@ -169,7 +168,20 @@ void userDialog::onAddUser(wxCommandEvent& event){
     error_dialog->ShowModal();
     return;
 
- }  
+ }
+
+ wxString no = phone_text->GetLineText(0);
+ std::string num = std::string(no.mb_str());
+ 
+ for(char elt : no){
+ 
+   if(!isdigit(elt)){
+     wxMessageDialog* message = new wxMessageDialog(this, wxT("Phone number should be digits"), wxT("Error"), wxOK | wxICON_ERROR);
+      message->ShowModal();
+      return;
+   } 
+ }
+  
 // Informs the user that if everything goes well a new user will be added
  wxMessageDialog* dialog = new wxMessageDialog(this, wxT("A new user will be added"), wxT("Confirm"), wxOK | wxCANCEL);
  if(dialog->ShowModal() == wxID_OK){
@@ -233,7 +245,7 @@ void userDialog::onAddUser(wxCommandEvent& event){
 void userDialog::onSelectImage(wxCommandEvent& event){
 
  
-   wxFileDialog* selectFile = new wxFileDialog(this, "Select an Image","","", "`PNG and JPEG files (*.png; *jpg)|*.png;*.jpg");
+    selectFile = new wxFileDialog(this, "Select an Image","","", "`PNG and JPEG files (*.png; *jpg)|*.png;*.jpg");
   if(selectFile->ShowModal() == 5100){
       file_path = selectFile->GetPath();
     
@@ -254,3 +266,34 @@ void userDialog::onSelectImage(wxCommandEvent& event){
 
   }
 }
+
+void userDialog :: setTextValue(std::string name, std::string gender, std::string email, std::string phone, std::string address, std::string path){
+
+   name_text->ChangeValue(name);
+   email_text->ChangeValue(email);
+   phone_text->ChangeValue(phone);
+   address_text->ChangeValue(address);
+   if(gender == "Female"){
+       
+      gen_male -> SetValue(false);
+      gen_others -> SetValue(false);
+      gen_female -> SetValue(true);
+     
+   }
+  else if(gender == "Other"){
+     gen_male -> SetValue (false);
+     gen_female -> SetValue (false);
+     gen_others -> SetValue (true);
+     
+     
+    }
+
+  else{
+    gen_female->SetValue(false);
+    gen_others -> SetValue(false);
+    gen_male ->SetValue(false);
+    }
+
+    setProfile(path);
+  }
+

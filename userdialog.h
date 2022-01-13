@@ -3,13 +3,14 @@
 
 class userDialog : public wxDialog{
  
- private:
-  void onAddUser(wxCommandEvent& event);
+ protected:
+  virtual void onBtnClick(wxCommandEvent& event);
   void onSelectImage(wxCommandEvent& event);
   void onSetDefault(wxCommandEvent& event);
-  void onCancel(wxCommandEvent& event);
+  virtual void onCancel(wxCommandEvent& event);
   void onQuit(wxCloseEvent& event);  
 
+  wxFileDialog* selectFile;
   wxString file_path;
   wxBitmap pp;
   wxStaticBitmap* profile;  
@@ -25,7 +26,7 @@ class userDialog : public wxDialog{
   wxDECLARE_EVENT_TABLE();
  public:
   userDialog(const wxString &Title, wxWindow* parent);
-  wxPanel* imagePanel;
-  void setProfile(wxString filename);  
-
+  void setProfile(wxString filename);
+  void setTextValue(std::string name, std::string gender, std::string email, std::string phone, std::string address, std::string path);  
+  void showDialog();
 };
