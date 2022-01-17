@@ -29,7 +29,7 @@ void deleteDialog :: showDialog(){
 
 }
 
-void deleteDialog :: onButtonClick(wxCommandEvent& event){
+void deleteDialog :: onBtnClick(wxCommandEvent& event){
 
   wxMessageDialog* message = new wxMessageDialog(this, "Delete this User?","Confirm",wxOK | wxCANCEL);
   if(message -> ShowModal() == wxID_OK)
