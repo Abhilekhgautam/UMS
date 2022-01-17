@@ -24,6 +24,6 @@ void onCancel(wxCommandEvent& event);
 
  public:
   updateDialog(wxWindow* parent,wxString Title, testUser&);//TODO:change the third parameter to backend's class equivalent to testUser
-  void showDialog();
+ virtual void showDialog();
 
 };

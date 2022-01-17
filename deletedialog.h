@@ -22,7 +22,7 @@
 
 class deleteDialog : public updateDialog{
 
-  void onButtonClick(wxCommandEvent& event);
+  void onBtnClick(wxCommandEvent& event);
   void onCancel(wxCommandEvent& event);
 
  public:
